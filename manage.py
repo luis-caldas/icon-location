@@ -22,8 +22,6 @@ def main():
     # parse the args
     arguments = argument_parser.parse_args()
 
-    print(arguments.filepath)
-
     # check if the given paths are valid
     if not local_file.check_file(arguments.filepath):
         local_error.show("The file path given was invalid", argument_parser, True)
@@ -43,7 +41,10 @@ def main():
         local_file.write(data_managed, arguments.filepath)
 
     else:
-        icon_manager.restore()
+
+        icons_data = local_file.read(arguments.filepath)
+
+        icon_manager.restore(icons_data)
 
 
 if __name__ == "__main__":

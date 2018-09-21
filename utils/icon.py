@@ -20,11 +20,11 @@ ATTRIBUTES_ALLOWED = {
 
 PROGRAMS = {
     "backup": {
-        "info": "/usr/bin/gvfs-info",
+        "program": "/usr/bin/gvfs-info",
         "arguments": []
     },
     "restore": {
-        "program": "gvfs-set-attribute",
+        "program": "/usr/bin/gvfs-set-attribute",
         "arguments": ["-t", "string"]
     }
 }
@@ -73,7 +73,7 @@ class Icons:
         for each_item in list_items:
 
             built_command = [
-                PROGRAMS["backup"]["info"], *PROGRAMS["backup"]["arguments"],
+                PROGRAMS["backup"]["program"], *PROGRAMS["backup"]["arguments"],
                 path.abspath(each_item)
             ]
 
@@ -98,6 +98,36 @@ class Icons:
         # return the data
         return icons_data
 
-    def restore(self):
+    def restore(self, data_to_restore):
 
-        pass
+        # calculate the total number of iterations for verbose purposes
+        total_iterations = sum(len(each_item[1]) for each_item in data_to_restore)
+
+        # iterate the list of the items
+        for each_item in data_to_restore:
+
+            # renaming vars
+            path_received = each_item[0]
+            attribute_couples = each_item[1]
+
+            # add the attribute prefix
+            for each_attr in attribute_couples:
+                each_attr[0] = "%s::%s" % (
+                    ATTRIBUTE_PREFIX_NAME,
+                    each_attr[0]
+                )
+
+            # unfortunately i havent found anyt documentation that shows that
+            # this commands can replace multiple attributes simmultaneously
+            # so a command is run for each attribute set
+            for each_attr_couple in attribute_couples:
+
+                # build the command
+                built_command = [
+                    PROGRAMS["restore"]["program"], *PROGRAMS["restore"]["arguments"],
+                    path.abspath(path_received),
+                    *each_attr_couple
+                ]
+
+                # run the built command
+                program_output = subprocess.check_output(built_command)

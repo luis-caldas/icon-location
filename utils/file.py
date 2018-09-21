@@ -28,4 +28,4 @@ def read(received_path):
     absolute_path = path.abspath(received_path)
 
     with open(absolute_path) as file_d:
-        return file_d.read().decode()
+        return json.load(file_d)
