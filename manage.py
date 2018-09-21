@@ -35,16 +35,28 @@ def main():
     # check the chosen operation and run it
     if arguments.backup:
 
+        print("Backuping")
+
         data_managed = icon_manager.backup(arguments.backup)
+
+        print("Writing to file")
 
         # write data to file
         local_file.write(data_managed, arguments.filepath)
 
+        print("Done")
+
     else:
+
+        print("Reading from file")
 
         icons_data = local_file.read(arguments.filepath)
 
+        print("Restoring")
+
         icon_manager.restore(icons_data)
+
+        print("Done")
 
 
 if __name__ == "__main__":
