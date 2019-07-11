@@ -20,12 +20,12 @@ ATTRIBUTES_ALLOWED = {
 
 PROGRAMS = {
     "backup": {
-        "program": "/usr/bin/gvfs-info",
-        "arguments": []
+        "program": "/usr/bin/gio",
+        "arguments": ["info"]
     },
     "restore": {
-        "program": "/usr/bin/gvfs-set-attribute",
-        "arguments": ["-t", "string"]
+        "program": "/usr/bin/gio",
+        "arguments": ["set", "-t", "string"]
     }
 }
 
